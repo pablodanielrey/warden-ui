@@ -13,7 +13,7 @@ export class InicioComponent implements OnInit {
   }
 
   usuario_seleccionado(usuario) {
-    console.log(usuario);
+    console.log(usuario.id);
   }
  
 }
