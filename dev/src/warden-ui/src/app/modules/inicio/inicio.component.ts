@@ -12,4 +12,8 @@ export class InicioComponent implements OnInit {
   ngOnInit() {
   }
 
+  usuario_seleccionado(usuario) {
+    console.log(usuario);
+  }
+ 
 }
