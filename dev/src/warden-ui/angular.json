@@ -76,6 +76,9 @@
             "browserTarget": "warden-ui:build"
           },
           "configurations": {
+            "ui": {
+              "browserTarget": "warden-ui:build:ui"
+            },
             "production": {
               "browserTarget": "warden-ui:build:production"
             }
