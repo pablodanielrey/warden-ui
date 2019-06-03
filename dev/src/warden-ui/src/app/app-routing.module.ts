@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { DebugComponent } from './core/debug/debug.component';
 import { Oauth2Component } from './core/oauth2/oauth2.component';
 import { LoaderComponent } from './core/loader/loader.component';
 import { OidpGuard } from './core/oauth2/oidp.guard';
 import { SistemaComponent } from './core/sistema/sistema.component';
 import { InicioComponent } from './modules/inicio/inicio.component';
+import { PermisosComponent } from './modules/permisos/permisos.component';
 
 const routes: Routes = [
 
@@ -17,10 +19,11 @@ const routes: Routes = [
      canActivate: [OidpGuard],
      component: SistemaComponent,
      children: [
-      { path: 'inicio', component: InicioComponent }, 
+      { path: 'inicio', component: InicioComponent },
+      { path: 'permisos', component: PermisosComponent },  
      ]
-  }
-
+  },
+  { path: '**', redirectTo: '/loader', pathMatch: 'full' }
 ];
 
 @NgModule({

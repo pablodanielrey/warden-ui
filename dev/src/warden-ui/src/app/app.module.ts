@@ -11,12 +11,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { InicioComponent } from './modules/inicio/inicio.component';
 import { SeleccionarUsuarioComponent } from './shared/components/seleccionar-usuario/seleccionar-usuario.component';
+import { PermisosComponent } from './modules/permisos/permisos.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InicioComponent,
-    SeleccionarUsuarioComponent
+    SeleccionarUsuarioComponent,
+    PermisosComponent
   ],
   imports: [
     BrowserModule,

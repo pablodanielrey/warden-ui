@@ -1,0 +1,18 @@
+<mat-toolbar-row>
+    <button mat-button color="primary" (click)='volver()'><mat-icon>undo </mat-icon> VOLVER</button>
+    <span>&nbsp;  Establecer Permisos | Seleccionar Usuario</span>
+</mat-toolbar-row>
+
+<mat-divider></mat-divider>
+
+<div class="pantalla">
+  <app-seleccionar-usuario (seleccionado)='usuario_seleccionado($event)'></app-seleccionar-usuario>
+  <button mat-stroked-button color="primary" (click)='crear_persona()' class="btnCrear">ESTABLECER PERMISOS</button>
+
+
+</div>
+
+
+
+
+

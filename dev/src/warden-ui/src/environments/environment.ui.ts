@@ -15,7 +15,7 @@ export const environment = {
     cabecera: 'WARDEN | FCE',
     version: '0.0.1a',
     tituloSistema: 'WARDEN',
-    subtituloSistema: '',
+    subtituloSistema: 'Sistema de Control de Accesos a Sistemas de la FCE',
     desarrolloSistema: 'DiTeSI | Dirección de Tecnologías y Sistemas Informáticos',
     logoSistema: '/assets/img/fce/logofce2018.png',
   }  
