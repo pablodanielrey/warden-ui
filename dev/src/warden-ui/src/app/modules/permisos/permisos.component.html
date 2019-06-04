@@ -16,18 +16,12 @@
       <br>
       DNI: {{usuario.dni}}
       <br>
-      Permisos asignados al usuario:
-      <br>
-      <div *ngFor='let pu of (permisosUsuario$ | async)'>
-        {{pu.nombre}}
-        {{pu.permiso}}
-      </div>
     </div>    
     <br>
     <mat-divider></mat-divider>
     <div *ngFor='let p of (permiso$ | async)'>
       {{p.nombre}}
-      {{p.permiso}}
+      <mat-checkbox class="example-margin" [(ngModel)]="p.habilitado"></mat-checkbox>
     </div>
  
     <button mat-stroked-button color="primary" (click)='guardar_permisos()' class="btnCrear">ESTABLECER PERMISOS</button>

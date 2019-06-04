@@ -15,9 +15,6 @@ export class PermisosComponent implements OnInit {
 
   usuario : Usuario = null;
   permiso$: Observable<any>;
-  permisosUsuario$: Observable<any>;
-
-  diccionarioPermisos: Array<string> = ['urn:assistance:users:read','urn:assistance:users:read:many']
     
   constructor(
     private navegar: NavegarService,
@@ -30,7 +27,33 @@ export class PermisosComponent implements OnInit {
     
   usuario_seleccionado(usuario) {
     this.usuario = usuario;
-    this.permisosUsuario$ = this.service.buscarPermisos(usuario.id)
+    this.service.buscarPermisos(usuario.id).subscribe(per => {
+      let permisosUsuario = per;
+      permisosUsuario.forEach(perm => {
+        this.permiso$.subscribe( per => {
+          per.forEach( p => {
+            if (p.permiso == perm){
+              console.log('Permiso Encontrado');
+              p.habilitado = true;
+            }
+          });          
+        })
+      })
+   });
+    
+  }
+
+  guardar_permisos(){
+    console.log('Entro')
+    let permisosAGuardar = []
+    this.permiso$.subscribe( per => {
+      per.forEach(p => {
+        if (p.habilitado){
+          permisosAGuardar.push(p.permiso);
+        }
+      });
+    })
+    console.log(this.usuario.id, permisosAGuardar)
   }
 
   volver() {
