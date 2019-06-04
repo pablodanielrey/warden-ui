@@ -12,6 +12,7 @@ import { CoreModule } from './core/core.module';
 import { InicioComponent } from './modules/inicio/inicio.component';
 import { SeleccionarUsuarioComponent } from './shared/components/seleccionar-usuario/seleccionar-usuario.component';
 import { PermisosComponent } from './modules/permisos/permisos.component';
+import { WardenService } from './shared/services/warden.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,9 @@ import { PermisosComponent } from './modules/permisos/permisos.component';
     BrowserAnimationsModule,
     CoreModule
   ],
-  providers: [],
+  providers: [
+    WardenService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,8 +7,31 @@
 
 <div class="pantalla">
   <app-seleccionar-usuario (seleccionado)='usuario_seleccionado($event)'></app-seleccionar-usuario>
-  <button mat-stroked-button color="primary" (click)='crear_persona()' class="btnCrear">ESTABLECER PERMISOS</button>
-
+  
+  <div *ngIf='usuario'>
+    <div>
+      Nombre: {{usuario.nombre}}
+      <br>
+      Apellido: {{usuario.apellido}}
+      <br>
+      DNI: {{usuario.dni}}
+      <br>
+      Permisos asignados al usuario:
+      <br>
+      <div *ngFor='let pu of (permisosUsuario$ | async)'>
+        {{pu.nombre}}
+        {{pu.permiso}}
+      </div>
+    </div>    
+    <br>
+    <mat-divider></mat-divider>
+    <div *ngFor='let p of (permiso$ | async)'>
+      {{p.nombre}}
+      {{p.permiso}}
+    </div>
+ 
+    <button mat-stroked-button color="primary" (click)='guardar_permisos()' class="btnCrear">ESTABLECER PERMISOS</button>
+  </div>
 
 </div>
 
