@@ -27,8 +27,13 @@
     <button mat-stroked-button color="primary" (click)='guardar_permisos()' class="btnCrear">ESTABLECER PERMISOS</button>
   </div>
 
+  permisos procesados2
+  <div *ngFor='let p of (permisos_filtrados$ | async)'>
+    {{p.nombre}}
+    <mat-checkbox class="example-margin" [(ngModel)]="p.habilitado"></mat-checkbox>
+  </div>
+  
 </div>
-
 
 
 

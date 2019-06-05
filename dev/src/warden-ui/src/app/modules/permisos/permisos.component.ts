@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NavegarService } from '../../core/navegar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../shared/entities/usuario';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Permiso } from '../../shared/entities/warden';
 import { WardenService } from '../../shared/services/warden.service';
+import { map, mergeMap, tap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-permisos',
@@ -14,32 +16,62 @@ import { WardenService } from '../../shared/services/warden.service';
 export class PermisosComponent implements OnInit {
 
   usuario : Usuario = null;
-  permiso$: Observable<any>;
+  permiso$: Observable<Permiso[]>;
+  permisos_filtrados$: BehaviorSubject<Permiso[]>;
     
   constructor(
     private navegar: NavegarService,
     private service: WardenService
     ) { }
 
+
   ngOnInit() {
     this.permiso$ = this.service.obtenerPermisosDisponibles();
+
+    // TODAVIA FALTA CON MIGUEL VER BIEN CODIGO: ESTO NO ES LA SOLUCION IDEAL!!!
+    this.permisos_filtrados$ = new BehaviorSubject<Permiso[]>([]);
   }
+
     
   usuario_seleccionado(usuario) {
-    this.usuario = usuario;
-    this.service.buscarPermisos(usuario.id).subscribe(per => {
-      let permisosUsuario = per;
-      permisosUsuario.forEach(perm => {
-        this.permiso$.subscribe( per => {
-          per.forEach( p => {
-            if (p.permiso == perm){
-              console.log('Permiso Encontrado');
-              p.habilitado = true;
-            }
-          });          
-        })
+
+    // TODAVIA FALTA CON MIGUEL VER BIEN CODIGO: ESTO NO ES LA SOLUCION IDEAL!!!
+
+    let permisos_usuario$ = this.service.buscarPermisos(usuario.id);
+    let permisos_totales$ = this.permiso$;
+
+    let permisos_procesados2$ : Observable<Permiso[]> = this.permiso$.pipe(
+      mergeMap(permisos => {
+        return permisos_usuario$.pipe(
+          map(ps => {
+            let permisos_procesados : Permiso[] = [];
+            permisos.forEach(p => {
+              permisos_procesados.push(p);
+              if (ps.includes(p.permiso)) {
+                p.habilitado = true;
+              }
+            })
+            return permisos_procesados;
+          }),
+          tap(v => console.log(v))
+        )
       })
-   });
+    )
+
+    permisos_procesados2$.subscribe(ps => {
+      this.permisos_filtrados$.next(ps);
+    })
+
+
+    let permisos_procesados$ = permisos_usuario$.pipe(
+      map(permisos_usuario => {
+
+      })
+    )
+
+    this.usuario = usuario;
+   
+   
     
   }
 
