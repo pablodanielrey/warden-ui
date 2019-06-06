@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavegarService } from '../../core/navegar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../shared/entities/usuario';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { Permiso } from '../../shared/entities/warden';
 import { WardenService } from '../../shared/services/warden.service';
 import { map, mergeMap, tap } from 'rxjs/operators';
@@ -17,8 +17,10 @@ export class PermisosComponent implements OnInit {
 
   usuario : Usuario = null;
   permiso$: Observable<Permiso[]>;
-  permisos_filtrados$: BehaviorSubject<Permiso[]>;
+  permisos_filtrados$: Observable<Permiso[]>;
     
+  usuario_seleccionado$: Subject<any> = new Subject<any>();
+
   constructor(
     private navegar: NavegarService,
     private service: WardenService
@@ -30,28 +32,28 @@ export class PermisosComponent implements OnInit {
 
     // TODAVIA FALTA CON MIGUEL VER BIEN CODIGO: ESTO NO ES LA SOLUCION IDEAL!!!
     this.permisos_filtrados$ = new BehaviorSubject<Permiso[]>([]);
-  }
 
-    
-  usuario_seleccionado(usuario) {
-
-    // TODAVIA FALTA CON MIGUEL VER BIEN CODIGO: ESTO NO ES LA SOLUCION IDEAL!!!
-
-    let permisos_usuario$ = this.service.buscarPermisos(usuario.id);
-    let permisos_totales$ = this.permiso$;
-
-    let permisos_procesados2$ : Observable<Permiso[]> = this.permiso$.pipe(
+    let permisos_usuario$ = this.usuario_seleccionado$.pipe(
+      mergeMap(usuario => {
+        return this.service.buscarPermisos(usuario.id);
+      })
+    )
+    this.permisos_filtrados$ = this.permiso$.pipe(
       mergeMap(permisos => {
         return permisos_usuario$.pipe(
           map(ps => {
             let permisos_procesados : Permiso[] = [];
             permisos.forEach(p => {
-              permisos_procesados.push(p);
-              if (ps.includes(p.permiso)) {
-                p.habilitado = true;
-              }else{
-                p.habilitado = false;
+              let p2 = {
+                  permiso: p.permiso,
+                  nombre: p.nombre,
+                  habilitado: false
               }
+              if (ps.includes(p.permiso)) {
+                  p2.habilitado = true;
+              }
+              permisos_procesados.push(p2)
+
             })
             return permisos_procesados;
           }),
@@ -60,21 +62,11 @@ export class PermisosComponent implements OnInit {
       })
     )
 
-    permisos_procesados2$.subscribe(ps => {
-      this.permisos_filtrados$.next(ps);
-    })
-
-
-    let permisos_procesados$ = permisos_usuario$.pipe(
-      map(permisos_usuario => {
-
-      })
-    )
-
-    this.usuario = usuario;
-   
-   
+  }
     
+  usuario_seleccionado(usuario) {
+    this.usuario_seleccionado$.next(usuario);
+    this.usuario = usuario;
   }
 
   guardar_permisos(){
