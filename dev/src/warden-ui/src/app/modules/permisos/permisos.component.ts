@@ -49,6 +49,8 @@ export class PermisosComponent implements OnInit {
               permisos_procesados.push(p);
               if (ps.includes(p.permiso)) {
                 p.habilitado = true;
+              }else{
+                p.habilitado = false;
               }
             })
             return permisos_procesados;
