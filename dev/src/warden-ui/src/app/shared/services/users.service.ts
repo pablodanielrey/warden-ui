@@ -92,4 +92,13 @@ export class UsersService {
     return of(personas2);
   }
  
+  buscarPersonaPorUid(uid: string) : Observable<any> {
+    let us = this.usuarios.filter(u => u.id == uid);
+    if (us.length <= 0) {
+      return of(null);
+    } else {
+      return of(us[0]);
+    }
+  }
+
 }

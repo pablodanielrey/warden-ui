@@ -8,7 +8,7 @@
 <div class="pantalla">
   <app-seleccionar-usuario (seleccionado)='usuario_seleccionado($event)'></app-seleccionar-usuario>
   
-  <div *ngIf='usuario'>
+  <div *ngIf='usuario$ | async as usuario'>
     <div>
       Nombre: {{usuario.nombre}}
       <br>

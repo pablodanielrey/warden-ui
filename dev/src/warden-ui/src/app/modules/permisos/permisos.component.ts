@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavegarService } from '../../core/navegar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../shared/entities/usuario';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Permiso } from '../../shared/entities/warden';
 import { WardenService } from '../../shared/services/warden.service';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { UsersService } from 'src/app/shared/services/users.service';
 
 
 @Component({
@@ -13,17 +14,22 @@ import { map, mergeMap, tap } from 'rxjs/operators';
   templateUrl: './permisos.component.html',
   styleUrls: ['./permisos.component.scss']
 })
-export class PermisosComponent implements OnInit {
+export class PermisosComponent implements OnInit, OnDestroy {
 
-  usuario : Usuario = null;
+  susbcriptions: Subscription[] = [];
+
+  ngOnDestroy(): void {
+    this.susbcriptions.forEach(s => s.unsubscribe());  
+  }
+
+  usuario$ : Observable<Usuario>;
   permiso$: Observable<Permiso[]>;
   permisos_filtrados$: Observable<Permiso[]>;
-    
-  usuario_seleccionado$: Subject<any> = new Subject<any>();
 
   constructor(
     private navegar: NavegarService,
     private service: WardenService,
+    private userService: UsersService,
     private route: ActivatedRoute
     ) { }
 
@@ -38,8 +44,11 @@ export class PermisosComponent implements OnInit {
       map(params => {
         console.log(params);
         return params['uid'];
-      }),
-      tap(v => console.log(v))
+      })
+    )
+
+    this.usuario$ = usuario_seleccionado$.pipe(
+      mergeMap(uid => this.userService.buscarPersonaPorUid(uid) )
     )
 
     let permisos_usuario$ = usuario_seleccionado$.pipe(
@@ -74,11 +83,7 @@ export class PermisosComponent implements OnInit {
   }
     
   usuario_seleccionado(usuario) {
-    let subscription = this.navegar.navegar({url:'/sistema/permisos', params:{uid: usuario.id}}).subscribe(_ => {
-      subscription.unsubscribe();
-    })
-    //this.usuario_seleccionado$.next(usuario);
-    this.usuario = usuario;
+    this.susbcriptions.push(this.navegar.navegar({url:'/sistema/permisos', params:{uid: usuario.id}}).subscribe());
   }
 
   guardar_permisos(){
@@ -91,7 +96,6 @@ export class PermisosComponent implements OnInit {
         }
       });
     })
-    console.log(this.usuario.id, permisosAGuardar)
   }
 
   volver() {
