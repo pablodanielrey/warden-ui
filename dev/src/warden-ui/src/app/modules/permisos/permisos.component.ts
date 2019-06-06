@@ -23,7 +23,8 @@ export class PermisosComponent implements OnInit {
 
   constructor(
     private navegar: NavegarService,
-    private service: WardenService
+    private service: WardenService,
+    private route: ActivatedRoute
     ) { }
 
 
@@ -33,9 +34,17 @@ export class PermisosComponent implements OnInit {
     // TODAVIA FALTA CON MIGUEL VER BIEN CODIGO: ESTO NO ES LA SOLUCION IDEAL!!!
     this.permisos_filtrados$ = new BehaviorSubject<Permiso[]>([]);
 
-    let permisos_usuario$ = this.usuario_seleccionado$.pipe(
-      mergeMap(usuario => {
-        return this.service.buscarPermisos(usuario.id);
+    let usuario_seleccionado$ = this.route.queryParams.pipe(
+      map(params => {
+        console.log(params);
+        return params['uid'];
+      }),
+      tap(v => console.log(v))
+    )
+
+    let permisos_usuario$ = usuario_seleccionado$.pipe(
+      mergeMap(uid => {
+        return this.service.buscarPermisos(uid);
       })
     )
     this.permisos_filtrados$ = this.permiso$.pipe(
@@ -47,7 +56,7 @@ export class PermisosComponent implements OnInit {
               let p2 = {
                   permiso: p.permiso,
                   nombre: p.nombre,
-                  habilitado: false
+                  habilitado: p.habilitado
               }
               if (ps.includes(p.permiso)) {
                   p2.habilitado = true;
@@ -65,7 +74,10 @@ export class PermisosComponent implements OnInit {
   }
     
   usuario_seleccionado(usuario) {
-    this.usuario_seleccionado$.next(usuario);
+    let subscription = this.navegar.navegar({url:'/sistema/permisos', params:{uid: usuario.id}}).subscribe(_ => {
+      subscription.unsubscribe();
+    })
+    //this.usuario_seleccionado$.next(usuario);
     this.usuario = usuario;
   }
 
