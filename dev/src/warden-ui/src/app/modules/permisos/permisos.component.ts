@@ -42,7 +42,6 @@ export class PermisosComponent implements OnInit, OnDestroy {
 
     let usuario_seleccionado$ = this.route.queryParams.pipe(
       map(params => {
-        console.log(params);
         return params['uid'];
       })
     )
@@ -75,7 +74,6 @@ export class PermisosComponent implements OnInit, OnDestroy {
             })
             return permisos_procesados;
           }),
-          tap(v => console.log(v))
         )
       })
     )
@@ -88,14 +86,8 @@ export class PermisosComponent implements OnInit, OnDestroy {
 
   guardar_permisos(){
     console.log('Entro')
-    let permisosAGuardar = []
-    this.permiso$.subscribe( per => {
-      per.forEach(p => {
-        if (p.habilitado){
-          permisosAGuardar.push(p.permiso);
-        }
-      });
-    })
+    
+
   }
 
   volver() {

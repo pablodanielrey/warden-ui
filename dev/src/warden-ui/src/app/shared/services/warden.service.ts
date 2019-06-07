@@ -14,16 +14,38 @@ export class WardenService {
     /**
      * Retorna en obserbables los permisos de prueba
      */
-
     let permisos : Permiso[] = [
-      /*new Permiso("URN_ASSISTANCE_USERS_READ","urn:assistance:users:read"),
-      new Permiso("URN_ASSISTANCE_USERS_READ_MANY","urn:assistance:users:read:many"),
-      new Permiso('URN_ASSISTANCE_LOGS_READ','urn:assistance:logs:read'),
-      new Permiso('URN_ASSISTANCE_DEVICES_READ','urn:assistance:devices:read'),
-      new Permiso('URN_SILEG_USERS_READ_RESTRICTED','urn:sileg:users:read:resticted'),
-      new Permiso('URN_ASSISTANCE_REPORT_READ_SELF','urn:assistance:report:read:self'),
-      new Permiso('URN_ASSISTANCE_DEVICES_WRITE','urn:assistance:devices:write'),*/
-      { nombre:'URN_ASSISTANCE_USERS_READ',  permiso:'urn:assistance:users:read', habilitado: false }
+      {nombre: 'ASSISTANCE_USERS_READ',                                    permiso: 'urn:assistance:users:read',habilitado:false},
+      {nombre: 'ASSISTANCE_USERS_READ_MANY',                               permiso: 'urn:assistance:users:read:many',habilitado:false},
+      {nombre: 'ASSISTANCE_USERS_READ_MANY_RESTRICTED',                    permiso: 'urn:assistance:users:read:many:restricted',habilitado:false},
+      {nombre: 'ASSISTANCE_USERS_READ_SELF',                               permiso: 'urn:assistance:users:read:self',habilitado:false},
+      {nombre: 'ASSISTANCE_PLACES_READ',                                   permiso: 'urn:assistance:places:read',habilitado:false},
+      {nombre: 'ASSISTANCE_PLACES_READ_MANY',                              permiso: 'urn:assistance:places:read:many',habilitado:false},
+      {nombre: 'ASSISTANCE_ASSISTANCE-REPORT_READ',                        permiso: 'urn:assistance:assistance-report:read',habilitado:false},
+      {nombre: 'ASSISTANCE_ASSISTANCE-REPORT_READ_MANY_RESTRICTED',        permiso: 'urn:assistance:assistance-report:read:many:restricted',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATIONS-REPORT_READ',                    permiso: 'urn:assistance:justifications-report:read',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATIONS-REPORT_READ_MANY_RESTRICTED',    permiso: 'urn:assistance:justifications-report:read:many:restricted',habilitado:false},
+      {nombre: 'ASSISTANCE_GENERAL-ASSISTANCE-REPORT_READ',                permiso: 'urn:assistance:general-assistance-report:read',habilitado:false},
+      {nombre: 'ASSISTANCE_GENERAL-ASSISTANCE-REPORT_READ_MANY_RESTRICTED',permiso: 'urn:assistance:general-assistance-report:read:many:restricted',habilitado:false},
+      {nombre: 'ASSISTANCE_SCHEDULE_READ',                                 permiso: 'urn:assistance:schedule:read',habilitado:false},
+      {nombre: 'ASSISTANCE_SCHEDULE_READ_SELF',                            permiso: 'urn:assistance:schedule:read:self',habilitado:false},
+      {nombre: 'ASSISTANCE_SCHEDULE_READ_MANY_RESTRICTED',                 permiso: 'urn:assistance:schedule:read:many:restricted',habilitado:false},
+      {nombre: 'ASSISTANCE_SCHEDULE_DELETE',                               permiso: 'urn:assistance:schedule:delete',habilitado:false},
+      {nombre: 'ASSISTANCE_SCHEDULE_CREATE',                               permiso: 'urn:assistance:schedule:create',habilitado:false},
+      {nombre: 'ASSISTANCE_LOGS_READ',                                     permiso: 'urn:assistance:logs:read',habilitado:false},
+      {nombre: 'ASSISTANCE_LOGS_CREATE',                                   permiso: 'urn:assistance:logs:create',habilitado:false},
+      {nombre: 'ASSISTANCE_DEVICES_READ',                                  permiso: 'urn:assistance:devices:read',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATIONS_READ:',                          permiso: 'urn:assistance:justifications:read',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATIONS_READ_MANY_RESTRICTED',           permiso: 'urn:assistance:justifications:read:many:restricted',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATIONS_CREATE',                         permiso: 'urn:assistance:justifications:create',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATIONS_DELETE',                         permiso: 'urn:assistance:justifications:delete',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATIONS_UPDATE',                         permiso: 'urn:assistance:justifications:update',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATION-DATE_READ',                       permiso: 'urn:assistance:justification-date:read',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATION-DATE_READ_SELF',                  permiso: 'urn:assistance:justification-date:read:self',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATION-DATE_CREATE',                     permiso: 'urn:assistance:justification-date:create',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATION-DATE_CREATE_MANY_RESTRICTED',     permiso: 'urn:assistance:justification-date:create:many:restricted',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATION-DATE_DELETE',                     permiso: 'urn:assistance:justification-date:delete',habilitado:false},
+      {nombre: 'ASSISTANCE_JUSTIFICATION-DATE_DELETE_MANY_RESTRICTED',     permiso: 'urn:assistance:justification-date:delete:many:restricted',habilitado:false},
     ]
     return of(permisos);
   }
