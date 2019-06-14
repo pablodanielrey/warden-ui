@@ -19,12 +19,27 @@
     </div>    
     <br>
     <mat-divider></mat-divider>
+
+    <form [formGroup]='form' (ngSubmit)='guardar_permisos()' *ngIf='permisos_filtrados$ | async'>
+      <div formArrayName='permisos'>
+        <div *ngFor='let h of permisos.controls; let i=index'>
+          <div [formGroup]='h'>
+            <input formControlName='permiso'/>
+            <mat-checkbox class="example-margin" formControlName='habilitado'></mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <button type='submit' mat-stroked-button color="primary" class="btnCrear">GUARDAR PERMISOS</button>
+    </form>
+
+    <!--
     <div *ngFor='let p of (permisos_filtrados$ | async)'>
-      {{p.permiso}}
-      <mat-checkbox class="example-margin" [(ngModel)]="p.habilitado"></mat-checkbox>
+        {{p.permiso}}
     </div>
- 
-    <button mat-stroked-button color="primary" (click)='guardar_permisos()' class="btnCrear">GUARDAR PERMISOS</button>
+    -->
+
+
   </div>
 
 </div>

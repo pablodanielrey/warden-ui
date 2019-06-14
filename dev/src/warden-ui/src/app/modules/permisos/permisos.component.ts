@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavegarService } from '../../core/navegar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario } from '../../shared/entities/usuario';
-import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, Subscription, combineLatest } from 'rxjs';
 import { Permiso } from '../../shared/entities/warden';
 import { WardenService } from '../../shared/services/warden.service';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { UsersService } from 'src/app/shared/services/users.service';
+import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
 
 interface PermisoUI {
   nombre: string,
@@ -23,6 +24,9 @@ export class PermisosComponent implements OnInit, OnDestroy {
 
   susbcriptions: Subscription[] = [];
 
+  form: FormGroup = null;
+
+
   ngOnDestroy(): void {
     this.susbcriptions.forEach(s => s.unsubscribe());  
   }
@@ -30,13 +34,23 @@ export class PermisosComponent implements OnInit, OnDestroy {
   usuario$ : Observable<Usuario>;
   permiso$: Observable<Permiso[]>;
   permisos_filtrados$: Observable<PermisoUI[]>;
+  recargar$ = new Subject<void>();
 
   constructor(
-    private navegar: NavegarService,
-    private service: WardenService,
-    private userService: UsersService,
-    private route: ActivatedRoute
-    ) { }
+          private navegar: NavegarService,
+          private service: WardenService,
+          private userService: UsersService,
+          private route: ActivatedRoute,
+          private fb : FormBuilder) { 
+      
+      this.form = this.fb.group({
+        permisos: this.fb.array([])
+      });
+  }
+
+  get permisos() {
+    return this.form.get('permisos') as FormArray;
+  }
 
 
   ngOnInit() {
@@ -76,22 +90,29 @@ export class PermisosComponent implements OnInit, OnDestroy {
               }
               permisos_procesados.push(p2)
 
+              this.permisos.push(
+                this.fb.group({
+                  permiso: this.fb.control(p2.permiso),
+                  nombre: this.fb.control(''),
+                  habilitado: this.fb.control(p2.habilitado)
+                })
+              );
+
             })
             return permisos_procesados;
           })
         )
       })
     )
-
   }
     
   usuario_seleccionado(usuario) {
     this.susbcriptions.push(this.navegar.navegar({url:'/sistema/permisos', params:{uid: usuario.id}}).subscribe());
   }
 
-  guardar_permisos(){
-    console.log('Entro')
-    
+  guardar_permisos() {
+    console.log('Entro');
+    console.log(this.form.value);
 
   }
 
