@@ -59,21 +59,21 @@ export class PermisosComponent implements OnInit, OnDestroy {
       mergeMap(permisos => {
         return permisos_usuario$.pipe(
           map(ps => {
-            let permisos_procesados : Permiso[] = [];
+            let permisos_procesados : any[] = [];
             permisos.forEach(p => {
               let p2 = {
-                  permiso: p.permiso,
-                  nombre: p.nombre,
-                  habilitado: p.habilitado
+                  permiso: p.permission,
+                  nombre: '',
+                  habilitado: false
               }
-              if (ps.includes(p.permiso)) {
+              if (ps.includes(p.permission)) {
                   p2.habilitado = true;
               }
               permisos_procesados.push(p2)
 
             })
             return permisos_procesados;
-          }),
+          })
         )
       })
     )

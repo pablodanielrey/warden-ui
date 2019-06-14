@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Permiso } from '../entities/warden';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
+const WARDEN_API_URL = environment.wardenApiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class WardenService {
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
+  /*
   obtenerPermisosDisponibles(): Observable<Permiso[]> {
-    /**
-     * Retorna en obserbables los permisos de prueba
-     */
     let permisos : Permiso[] = [
       {nombre: 'ASSISTANCE_USERS_READ',                                    permiso: 'urn:assistance:users:read',habilitado:false},
       {nombre: 'ASSISTANCE_USERS_READ_MANY',                               permiso: 'urn:assistance:users:read:many',habilitado:false},
@@ -49,6 +51,12 @@ export class WardenService {
     ]
     return of(permisos);
   }
+  */
+
+ obtenerPermisosDisponibles(): Observable<Permiso[]> {
+    return this.http.get<Permiso[]>(WARDEN_API_URL + '/permisos');
+ }
+
 
   buscarPermisos(uid:string): Observable<string[]>{
     /**
