@@ -8,6 +8,11 @@ import { WardenService } from '../../shared/services/warden.service';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { UsersService } from 'src/app/shared/services/users.service';
 
+interface PermisoUI {
+  nombre: string,
+  permiso: string,
+  habilitado: boolean
+}
 
 @Component({
   selector: 'app-permisos',
@@ -24,7 +29,7 @@ export class PermisosComponent implements OnInit, OnDestroy {
 
   usuario$ : Observable<Usuario>;
   permiso$: Observable<Permiso[]>;
-  permisos_filtrados$: Observable<Permiso[]>;
+  permisos_filtrados$: Observable<PermisoUI[]>;
 
   constructor(
     private navegar: NavegarService,
@@ -38,7 +43,7 @@ export class PermisosComponent implements OnInit, OnDestroy {
     this.permiso$ = this.service.obtenerPermisosDisponibles();
 
     // TODAVIA FALTA CON MIGUEL VER BIEN CODIGO: ESTO NO ES LA SOLUCION IDEAL!!!
-    this.permisos_filtrados$ = new BehaviorSubject<Permiso[]>([]);
+    //this.permisos_filtrados$ = new BehaviorSubject<Permiso[]>([]);
 
     let usuario_seleccionado$ = this.route.queryParams.pipe(
       map(params => {
@@ -61,7 +66,7 @@ export class PermisosComponent implements OnInit, OnDestroy {
           map(ps => {
             let permisos_procesados : any[] = [];
             permisos.forEach(p => {
-              let p2 = {
+              let p2 : PermisoUI = {
                   permiso: p.permission,
                   nombre: '',
                   habilitado: false
