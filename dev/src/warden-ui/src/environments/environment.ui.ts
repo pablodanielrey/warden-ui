@@ -6,8 +6,9 @@ export const environment = {
   production: false,
   loginApiUrl: 'https://api.econo.unlp.edu.ar/login/api/v1.0',
   //wardenApiUrl: 'https://api.econo.unlp.edu.ar/warden/api/v1.0',
-  wardenApiUrl: 'http://localhost:10502/warden/api/v2.0',
+  wardenApiUrl: 'http://163.10.56.5:10502/warden/api/v2.0',
   oidp_issuer: 'https://oidc.econo.unlp.edu.ar/',
+  usersApiUrl: 'https://api.econo.unlp.edu.ar/users/api/v2.0',
 
   client_id: 'warden-ui',
   version: '0.0.1a',

@@ -66,7 +66,8 @@ export class PermisosComponent implements OnInit, OnDestroy {
     )
 
     this.usuario$ = usuario_seleccionado$.pipe(
-      mergeMap(uid => this.userService.buscarPersonaPorUid(uid) )
+      mergeMap(uid => this.userService.buscarUsuario(uid) ),
+      map(usrs => usrs.length > 0 ? usrs[0] : null)
     )
 
     let permisos_usuario$ = usuario_seleccionado$.pipe(
