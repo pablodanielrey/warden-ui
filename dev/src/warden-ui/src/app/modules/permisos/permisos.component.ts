@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavegarService } from '../../core/navegar.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../shared/entities/usuario';
-import { Observable, BehaviorSubject, Subject, Subscription, combineLatest } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Permiso } from '../../shared/entities/warden';
 import { WardenService } from '../../shared/services/warden.service';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { UsersService } from 'src/app/shared/services/users.service';
-import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 interface PermisoUI {
   nombre: string,
@@ -32,9 +32,9 @@ export class PermisosComponent implements OnInit, OnDestroy {
   }
 
   usuario$ : Observable<Usuario>;
+  uid: string = '';
   permiso$: Observable<Permiso[]>;
-  permisos_filtrados$: Observable<PermisoUI[]>;
-  recargar$ = new Subject<void>();
+  permisos_filtrados$: Observable<boolean>;
 
   constructor(
           private navegar: NavegarService,
@@ -52,21 +52,21 @@ export class PermisosComponent implements OnInit, OnDestroy {
     return this.form.get('permisos') as FormArray;
   }
 
-
   ngOnInit() {
     this.permiso$ = this.service.obtenerPermisosDisponibles();
-
-    // TODAVIA FALTA CON MIGUEL VER BIEN CODIGO: ESTO NO ES LA SOLUCION IDEAL!!!
-    //this.permisos_filtrados$ = new BehaviorSubject<Permiso[]>([]);
 
     let usuario_seleccionado$ = this.route.queryParams.pipe(
       map(params => {
         return params['uid'];
       })
     )
+    this.susbcriptions.push(usuario_seleccionado$.subscribe(uid => this.uid = uid));
 
     this.usuario$ = usuario_seleccionado$.pipe(
-      mergeMap(uid => this.userService.buscarUsuario(uid) ),
+      mergeMap(uid => { 
+          return this.userService.buscarUsuario(uid);
+        }
+      ),
       map(usrs => usrs.length > 0 ? usrs[0] : null)
     )
 
@@ -79,7 +79,7 @@ export class PermisosComponent implements OnInit, OnDestroy {
       mergeMap(permisos => {
         return permisos_usuario$.pipe(
           map(ps => {
-            let permisos_procesados : any[] = [];
+            this.permisos.clear();
             permisos.forEach(p => {
               let p2 : PermisoUI = {
                   permiso: p.permission,
@@ -89,8 +89,6 @@ export class PermisosComponent implements OnInit, OnDestroy {
               if (ps.includes(p.permission)) {
                   p2.habilitado = true;
               }
-              permisos_procesados.push(p2)
-
               this.permisos.push(
                 this.fb.group({
                   permiso: this.fb.control(p2.permiso),
@@ -98,9 +96,8 @@ export class PermisosComponent implements OnInit, OnDestroy {
                   habilitado: this.fb.control(p2.habilitado)
                 })
               );
-
             })
-            return permisos_procesados;
+            return (permisos.length > 0);
           })
         )
       })

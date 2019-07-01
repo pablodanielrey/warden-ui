@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Usuario, Mail } from '../entities/usuario'
-import { Permiso } from '../entities/warden';
+import { Observable } from 'rxjs';
+import { Usuario } from '../entities/usuario'
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.ui';
 import { map } from 'rxjs/operators';
@@ -16,15 +15,6 @@ export class UsersService {
   constructor(private http: HttpClient) {
     
   }
-
-  //buscarPersonas(texto: string): Observable<any[]> {
-  //  let personas2 = this.usuarios.filter( v => 
-  //      v.nombre.toLowerCase().includes(texto.toLowerCase()) ||
-  //      v.apellido.toLowerCase().includes(texto.toLowerCase()) ||
-  //      v.dni.toLowerCase().includes(texto.toLocaleLowerCase())
-  //    );
-  //  return of(personas2);
-  //}
  
   buscarUsuario(uid:string): Observable<Usuario[]> {
     let apiUrl = `${USERS_API_URL}/usuarios/${uid}`;
