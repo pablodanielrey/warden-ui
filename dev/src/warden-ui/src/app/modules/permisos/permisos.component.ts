@@ -109,9 +109,7 @@ export class PermisosComponent implements OnInit, OnDestroy {
   }
 
   guardar_permisos() {
-    console.log('Entro');
-    console.log(this.form.value);
-
+    this.susbcriptions.push(this.service.guardarPermisos(this.uid,this.form.value.permisos).subscribe())
   }
 
   volver() {
