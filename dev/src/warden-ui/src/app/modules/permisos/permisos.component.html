@@ -19,7 +19,7 @@
     </div>    
     <br>
     <mat-divider></mat-divider>
-
+    <br>
     <form [formGroup]='form' (ngSubmit)='guardar_permisos()' *ngIf='permisos_filtrados$ | async'>
       <div formArrayName='permisos'>
         <div *ngFor='let h of permisos.controls; let i=index'>
